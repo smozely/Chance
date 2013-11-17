@@ -1,6 +1,8 @@
 package com.stevemosley.chance;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -48,16 +50,50 @@ public class ChanceTest {
     }
 
     @Test
-    public void testBool() throws Exception {
+    public void testBoolReturns() throws Exception {
 
         // GIVEN
 
-        // WHEN / THEN
-        assertEquals(true, underTest.bool());
-        assertEquals(true, underTest.bool());
-        assertEquals(true, underTest.bool());
-        assertEquals(false, underTest.bool());
-        assertEquals(true, underTest.bool());
-        assertEquals(false, underTest.bool());
+        // WHEN
+        boolean result = underTest.bool();
+
+        // THEN
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void testBoolRelativelyRandom() throws Exception {
+
+        // GIVEN
+
+        // WHEN
+        int trueCount = 0;
+
+        for(int i = 0; i < 1000; i++) {
+            if (underTest.bool()) {
+                trueCount++;
+            }
+        }
+
+        // THEN
+        assertThat(trueCount, allOf(greaterThan(475), lessThan(525)));
+    }
+
+    @Test
+    public void testBoolWithLikelihoodAppropriatelyRandom() throws Exception {
+
+        // GIVEN
+
+        // WHEN
+        int trueCount = 0;
+
+        for(int i = 0; i < 100000; i++) {
+            if (underTest.bool(30)) {
+                trueCount++;
+            }
+        }
+
+        // THEN
+        assertThat(trueCount, allOf(greaterThan(29500), lessThan(30500)));
     }
 }

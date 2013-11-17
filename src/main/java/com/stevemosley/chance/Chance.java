@@ -1,5 +1,7 @@
 package com.stevemosley.chance;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -68,5 +70,25 @@ public class Chance {
 
     public boolean bool() {
         return random.nextBoolean();
+    }
+
+    public boolean bool(int likelihood) {
+        checkArgument(likelihood > 0 && likelihood < 100, "likelihood must be between 0 and 100 (exclusive)");
+
+        int random = randomIntBetween(1, 100);
+        if (random > likelihood) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    private int randomIntBetween(int min, int max) {
+        // nextInt is exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = random.nextInt((max - min) + 1) + min;
+
+        return randomNum;
     }
 }
