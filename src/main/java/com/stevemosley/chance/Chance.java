@@ -106,8 +106,30 @@ public class Chance {
         return aChar(ALPHA_NUMERIC_CHARS);
     }
 
-    public char aChar(char[] set) {
-        return set[random.nextInt(set.length)];
+    public char aChar(char[] pool) {
+        return pool[random.nextInt(pool.length)];
+    }
+
+    public String aString(int length, char[] pool) {
+        char[] resultChars = new char[length];
+
+        for (int i = 0; i < resultChars.length; i++) {
+            resultChars[i] = aChar(pool);
+        }
+
+        return new String(resultChars);
+    }
+
+    public String aString(int length) {
+        return aString(length, ALPHA_NUMERIC_CHARS);
+    }
+
+    public String aString(char[] pool) {
+        return aString(randomIntBetween(5, 20), pool);
+    }
+
+    public String aString() {
+        return aString(randomIntBetween(5, 20), ALPHA_NUMERIC_CHARS);
     }
 
     private int randomIntBetween(int min, int max) {
