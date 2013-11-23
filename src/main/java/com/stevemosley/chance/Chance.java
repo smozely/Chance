@@ -33,7 +33,7 @@ public class Chance {
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG", "SUN");
             secureRandom.setSeed(seed);
             this.random = secureRandom;
-        } catch(NoSuchProviderException | NoSuchAlgorithmException exception) {
+        } catch (NoSuchProviderException | NoSuchAlgorithmException exception) {
             throw new RuntimeException("Error getting SecureRandom instance using 'SHA1PRNG'", exception);
         }
     }
@@ -50,41 +50,49 @@ public class Chance {
     /**
      * Return a guid string
      */
-    public String guid() {
+    public String aGuid() {
         byte[] randomBytes = new byte[16];
         random.nextBytes(randomBytes);
-        randomBytes[6]  &= 0x0f;  /* clear version        */
-        randomBytes[6]  |= 0x40;  /* set to version 4     */
-        randomBytes[8]  &= 0x3f;  /* clear variant        */
-        randomBytes[8]  |= 0x80;  /* set to IETF variant  */
+        randomBytes[6] &= 0x0f;  /* clear version        */
+        randomBytes[6] |= 0x40;  /* set to version 4     */
+        randomBytes[8] &= 0x3f;  /* clear variant        */
+        randomBytes[8] |= 0x80;  /* set to IETF variant  */
 
         long msb = 0;
         long lsb = 0;
-        for (int i=0; i<8; i++)
+        for (int i = 0; i < 8; i++)
             msb = (msb << 8) | (randomBytes[i] & 0xff);
-        for (int i=8; i<16; i++)
+        for (int i = 8; i < 16; i++)
             lsb = (lsb << 8) | (randomBytes[i] & 0xff);
 
         return new UUID(msb, lsb).toString();
     }
 
-    public boolean bool() {
+    public boolean aBool() {
         return random.nextBoolean();
     }
 
-    public boolean bool(int likelihood) {
+    public boolean aBool(int likelihood) {
         checkArgument(likelihood > 0 && likelihood < 100, "likelihood must be between 0 and 100 (exclusive)");
 
         int random = randomIntBetween(1, 100);
         return !(random > likelihood);
     }
 
-    public int natural() {
+    public int aNatural() {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
-    public int integer() {
+    public int aInteger() {
         return random.nextInt();
+    }
+
+    public float aFloat() {
+        return random.nextFloat();
+    }
+
+    public double aDouble() {
+        return random.nextDouble();
     }
 
     private int randomIntBetween(int min, int max) {

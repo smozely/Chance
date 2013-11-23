@@ -20,7 +20,7 @@ public class ChanceTest {
         Chance constructed = new Chance();
 
         // Just ensure that the Chance instance can be used
-        constructed.bool();
+        constructed.aBool();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class ChanceTest {
         Chance constructed = new Chance(1);
 
         // Since this has been created with a fixed seed result will always be the same
-        assertEquals(true, constructed.bool());
+        assertEquals(true, constructed.aBool());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ChanceTest {
         Chance constructed = new Chance(new Random(1));
 
         // Since this has been created with a fixed seed result will always be the same
-        assertEquals(true, constructed.bool());
+        assertEquals(true, constructed.aBool());
     }
 
     @Test
@@ -45,8 +45,8 @@ public class ChanceTest {
         // GIVEN
 
         // WHEN / THEN
-        assertEquals("998a9913-a54a-483a-82c5-d96a1c6cca7c", underTest.guid());
-        assertEquals("14477b2e-955e-43b8-8eff-83cbbce9d72f", underTest.guid());
+        assertEquals("998a9913-a54a-483a-82c5-d96a1c6cca7c", underTest.aGuid());
+        assertEquals("14477b2e-955e-43b8-8eff-83cbbce9d72f", underTest.aGuid());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ChanceTest {
         // GIVEN
 
         // WHEN
-        boolean result = underTest.bool();
+        boolean result = underTest.aBool();
 
         // THEN
         assertEquals(true, result);
@@ -69,8 +69,8 @@ public class ChanceTest {
         // WHEN
         int trueCount = 0;
 
-        for(int i = 0; i < 1000; i++) {
-            if (underTest.bool()) {
+        for (int i = 0; i < 1000; i++) {
+            if (underTest.aBool()) {
                 trueCount++;
             }
         }
@@ -87,8 +87,8 @@ public class ChanceTest {
         // WHEN
         int trueCount = 0;
 
-        for(int i = 0; i < 100000; i++) {
-            if (underTest.bool(30)) {
+        for (int i = 0; i < 100000; i++) {
+            if (underTest.aBool(30)) {
                 trueCount++;
             }
         }
@@ -98,30 +98,62 @@ public class ChanceTest {
     }
 
     /**
-     * Pretty pointless, just executing the code, but not really proving anything
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
     public void testNaturalReturnsAnPositiveInt() {
         // GIVEN
 
         // WHEN
-        int result = underTest.natural();
+        int result = underTest.aNatural();
 
         // THEN
         assertThat(result, is(allOf(greaterThanOrEqualTo(0), lessThan(Integer.MAX_VALUE))));
     }
 
     /**
-     * Pretty pointless, just executing the code, but not really proving anything
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
     public void testIntegerReturnsAnInt() {
         // GIVEN
 
         // WHEN
-        int result = underTest.integer();
+        int result = underTest.aInteger();
 
         // THEN
         assertThat(result, is(allOf(greaterThanOrEqualTo(Integer.MIN_VALUE), lessThanOrEqualTo(Integer.MAX_VALUE))));
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
+     */
+    @Test
+    public void testFloatReturnsAFloat() throws Exception {
+
+        // GIVEN
+
+
+        float result = underTest.aFloat();
+
+        // THEN
+        assertThat(result, is(allOf(greaterThanOrEqualTo(Float.MIN_VALUE), lessThanOrEqualTo(Float.MAX_VALUE))));
+
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
+     */
+    @Test
+    public void testDoubleReturnsADouble() throws Exception {
+
+        // GIVEN
+
+
+        double result = underTest.aDouble();
+
+        // THEN
+        assertThat(result, is(allOf(greaterThanOrEqualTo(Double.MIN_VALUE), lessThanOrEqualTo(Double.MAX_VALUE))));
+
     }
 }
