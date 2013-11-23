@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class ChanceTest {
 
-    private Chance underTest = new Chance(1234567890);
+    private final Chance underTest = new Chance(1234567890);
 
     @Test
     public void testWithDefaultConstructor() throws Exception {
@@ -95,5 +95,33 @@ public class ChanceTest {
 
         // THEN
         assertThat(trueCount, allOf(greaterThan(29500), lessThan(30500)));
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything
+     */
+    @Test
+    public void testNaturalReturnsAnPositiveInt() {
+        // GIVEN
+
+        // WHEN
+        int result = underTest.natural();
+
+        // THEN
+        assertThat(result, is(allOf(greaterThanOrEqualTo(0), lessThan(Integer.MAX_VALUE))));
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything
+     */
+    @Test
+    public void testIntegerReturnsAnInt() {
+        // GIVEN
+
+        // WHEN
+        int result = underTest.integer();
+
+        // THEN
+        assertThat(result, is(allOf(greaterThanOrEqualTo(Integer.MIN_VALUE), lessThanOrEqualTo(Integer.MAX_VALUE))));
     }
 }

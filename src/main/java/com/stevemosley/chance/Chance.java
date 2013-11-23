@@ -76,19 +76,20 @@ public class Chance {
         checkArgument(likelihood > 0 && likelihood < 100, "likelihood must be between 0 and 100 (exclusive)");
 
         int random = randomIntBetween(1, 100);
-        if (random > likelihood) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(random > likelihood);
     }
 
+    public int natural() {
+        return random.nextInt(Integer.MAX_VALUE);
+    }
+
+    public int integer() {
+        return random.nextInt();
+    }
 
     private int randomIntBetween(int min, int max) {
         // nextInt is exclusive of the top value,
         // so add 1 to make it inclusive
-        int randomNum = random.nextInt((max - min) + 1) + min;
-
-        return randomNum;
+        return random.nextInt((max - min) + 1) + min;
     }
 }
