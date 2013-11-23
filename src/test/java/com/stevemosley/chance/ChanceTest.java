@@ -4,13 +4,19 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import com.google.common.primitives.Chars;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.Repeat;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.Random;
 
 /**
  * All tests here using a fixed seed number so tests are repeatable.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ChanceTest {
 
     private final Chance underTest = new Chance(1234567890);
@@ -101,6 +107,7 @@ public class ChanceTest {
      * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
+    @Repeat(1000)
     public void testNaturalReturnsAnPositiveInt() {
         // GIVEN
 
@@ -115,6 +122,7 @@ public class ChanceTest {
      * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
+    @Repeat(1000)
     public void testIntegerReturnsAnInt() {
         // GIVEN
 
@@ -129,6 +137,7 @@ public class ChanceTest {
      * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
+    @Repeat(1000)
     public void testFloatReturnsAFloat() throws Exception {
 
         // GIVEN
@@ -145,6 +154,7 @@ public class ChanceTest {
      * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
      */
     @Test
+    @Repeat(1000)
     public void testDoubleReturnsADouble() throws Exception {
 
         // GIVEN
@@ -154,6 +164,44 @@ public class ChanceTest {
 
         // THEN
         assertThat(result, is(allOf(greaterThanOrEqualTo(Double.MIN_VALUE), lessThanOrEqualTo(Double.MAX_VALUE))));
+
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
+     */
+    @Test
+    @Repeat(1000)
+    public void testCharReturnsACharFromAlphaNumerics() throws Exception {
+
+        // GIVEN
+
+        // WHEN
+        char result = underTest.aChar();
+
+        // THEN
+        List<Character> values = Chars.asList(Chance.ALPHA_NUMERIC_CHARS);
+        assertThat(result, isIn(values));
+
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
+     */
+    @Test
+    @Repeat(1000)
+    public void testCharReturnsACharFromProvidedSet() throws Exception {
+
+        // GIVEN
+        char[] charSet = "ABC 123".toCharArray();
+
+
+        // WHEN
+        char result = underTest.aChar(charSet);
+
+        // THEN
+        List<Character> values = Chars.asList(charSet);
+        assertThat(result, isIn(values));
 
     }
 }

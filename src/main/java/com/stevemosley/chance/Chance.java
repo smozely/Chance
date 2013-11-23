@@ -2,6 +2,8 @@ package com.stevemosley.chance;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.primitives.Chars;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -12,6 +14,11 @@ import java.util.UUID;
  * TODO
  */
 public class Chance {
+
+    public static final char[] UPPER_CASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    public static final char[] LOWER_CASE_CHARS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    public static final char[] NUMERIC_CHARS = "0123456789".toCharArray();
+    public static final char[] ALPHA_NUMERIC_CHARS = Chars.concat(UPPER_CASE_CHARS, LOWER_CASE_CHARS, NUMERIC_CHARS);
 
     private final Random random;
 
@@ -93,6 +100,14 @@ public class Chance {
 
     public double aDouble() {
         return random.nextDouble();
+    }
+
+    public char aChar() {
+        return aChar(ALPHA_NUMERIC_CHARS);
+    }
+
+    public char aChar(char[] set) {
+        return set[random.nextInt(set.length)];
     }
 
     private int randomIntBetween(int min, int max) {
