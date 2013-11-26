@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.primitives.Chars;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Repeat;
@@ -139,6 +140,21 @@ public class ChanceTest {
      */
     @Test
     @Repeat(1000)
+    public void testLongReturnsAnLong() {
+        // GIVEN
+
+        // WHEN
+        long result = underTest.aLong();
+
+        // THEN
+        assertThat(result, is(allOf(greaterThanOrEqualTo(Long.MIN_VALUE), lessThanOrEqualTo(Long.MAX_VALUE))));
+    }
+
+    /**
+     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
+     */
+    @Test
+    @Repeat(1000)
     public void testFloatReturnsAFloat() throws Exception {
 
         // GIVEN
@@ -168,9 +184,6 @@ public class ChanceTest {
 
     }
 
-    /**
-     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
-     */
     @Test
     @Repeat(1000)
     public void testCharReturnsACharFromAlphaNumerics() throws Exception {
@@ -186,9 +199,6 @@ public class ChanceTest {
 
     }
 
-    /**
-     * Pretty pointless, just executing the code, but not really proving anything (trusting that the random works)
-     */
     @Test
     @Repeat(1000)
     public void testCharReturnsACharFromProvidedSet() throws Exception {
@@ -261,4 +271,19 @@ public class ChanceTest {
         assertThat(result, matches("[a-zA-Z0-9]{5,20}"));
     }
 
+    @Test
+    public void testDateTime() throws Exception {
+
+        // GIVEN
+        System.out.println(new DateTime(Long.MIN_VALUE));
+        System.out.println(new DateTime(2273327300317L));
+        System.out.println(new DateTime(Long.MAX_VALUE));
+
+        // WHEN
+
+
+        // THEN
+
+
+    }
 }

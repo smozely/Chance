@@ -1,12 +1,11 @@
 package com.stevemosley.chance;
 
 import static com.google.common.base.Preconditions.*;
+import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 
 import com.google.common.primitives.Chars;
+import org.joda.time.DateTime;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
 
@@ -20,13 +19,15 @@ public class Chance {
     public static final char[] NUMERIC_CHARS = "0123456789".toCharArray();
     public static final char[] ALPHA_NUMERIC_CHARS = Chars.concat(UPPER_CASE_CHARS, LOWER_CASE_CHARS, NUMERIC_CHARS);
 
+    private ChanceSettings settings;
+
     private final Random random;
 
     /**
      * Construct with a internally created random.
      */
     public Chance() {
-        this(new SecureRandom());
+        this(aChanceSettings().build());
     }
 
     /**
@@ -36,13 +37,7 @@ public class Chance {
      * @param seed - the seed value
      */
     public Chance(long seed) {
-        try {
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            secureRandom.setSeed(seed);
-            this.random = secureRandom;
-        } catch (NoSuchProviderException | NoSuchAlgorithmException exception) {
-            throw new RuntimeException("Error getting SecureRandom instance using 'SHA1PRNG'", exception);
-        }
+        this(aChanceSettings(seed).build());
     }
 
     /**
@@ -51,7 +46,12 @@ public class Chance {
      * @param random - the random to use
      */
     public Chance(Random random) {
-        this.random = random;
+        this(aChanceSettings(random).build());
+    }
+
+    public Chance(ChanceSettings settings) {
+        this.settings = settings;
+        this.random = settings.getRandom();
     }
 
     /**
@@ -94,6 +94,10 @@ public class Chance {
         return random.nextInt();
     }
 
+    public long aLong() {
+        return random.nextLong();
+    }
+
     public float aFloat() {
         return random.nextFloat();
     }
@@ -130,6 +134,14 @@ public class Chance {
 
     public String aString() {
         return aString(randomIntBetween(5, 20), ALPHA_NUMERIC_CHARS);
+    }
+
+    public DateTime aDateTime() {
+        return new DateTime(aLong());
+    }
+
+    public DateTime aDateTimeInTheFuture() {
+        return null;
     }
 
     private int randomIntBetween(int min, int max) {
