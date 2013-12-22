@@ -3,9 +3,11 @@ package com.stevemosley.chance;
 import static com.google.common.base.Preconditions.*;
 import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 
-import com.google.common.primitives.Chars;
+import com.stevemosley.chance.base.BooleanChance;
+import com.stevemosley.chance.base.GuidChance;
+import com.stevemosley.chance.base.NumericChance;
+import com.stevemosley.chance.base.StringChance;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import java.util.Random;
 import java.util.UUID;
@@ -15,14 +17,18 @@ import java.util.UUID;
  */
 public class Chance {
 
-    public static final char[] UPPER_CASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    public static final char[] LOWER_CASE_CHARS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    public static final char[] NUMERIC_CHARS = "0123456789".toCharArray();
-    public static final char[] ALPHA_NUMERIC_CHARS = Chars.concat(UPPER_CASE_CHARS, LOWER_CASE_CHARS, NUMERIC_CHARS);
-
     private ChanceSettings settings;
 
     private final Random random;
+
+    private final NumericChance numericChance;
+
+    private final StringChance stringChance;
+
+    private final GuidChance guidChance;
+
+    private final BooleanChance booleanChance;
+
 
     /**
      * Construct with a internally created random.
@@ -53,90 +59,82 @@ public class Chance {
     public Chance(ChanceSettings settings) {
         this.settings = settings;
         this.random = settings.getRandom();
+
+        this.numericChance = new NumericChance(settings);
+        this.stringChance = new StringChance(settings);
+        this.guidChance = new GuidChance(settings);
+        this.booleanChance = new BooleanChance(settings);
     }
 
-    /**
-     * Return a guid string
-     */
-    public String aGuid() {
-        byte[] randomBytes = new byte[16];
-        random.nextBytes(randomBytes);
-        randomBytes[6] &= 0x0f;  /* clear version        */
-        randomBytes[6] |= 0x40;  /* set to version 4     */
-        randomBytes[8] &= 0x3f;  /* clear variant        */
-        randomBytes[8] |= 0x80;  /* set to IETF variant  */
-
-        long msb = 0;
-        long lsb = 0;
-        for (int i = 0; i < 8; i++)
-            msb = (msb << 8) | (randomBytes[i] & 0xff);
-        for (int i = 8; i < 16; i++)
-            lsb = (lsb << 8) | (randomBytes[i] & 0xff);
-
-        return new UUID(msb, lsb).toString();
+    //// Numeric Chance Wrappers
+    public int aInteger() {
+        return numericChance.aInteger();
     }
 
-    public boolean aBool() {
-        return random.nextBoolean();
+    public int aInteger(int max) {
+        return numericChance.aInteger(max);
     }
 
-    public boolean aBool(int likelihood) {
-        checkArgument(likelihood > 0 && likelihood < 100, "likelihood must be between 0 and 100 (exclusive)");
-
-        int random = randomIntBetween(1, 100);
-        return !(random > likelihood);
+    public int aInteger(int min, int max) {
+        return numericChance.aInteger(min, max);
     }
 
     public int aNatural() {
-        return random.nextInt(Integer.MAX_VALUE);
-    }
-
-    public int aInteger() {
-        return random.nextInt();
+        return numericChance.aNatural();
     }
 
     public long aLong() {
-        return random.nextLong();
+        return numericChance.aLong();
     }
 
     public float aFloat() {
-        return random.nextFloat();
+        return numericChance.aFloat();
     }
 
     public double aDouble() {
-        return random.nextDouble();
+        return numericChance.aDouble();
     }
 
+    //// String Chance Wrappers
     public char aChar() {
-        return aChar(ALPHA_NUMERIC_CHARS);
+        return stringChance.aChar();
     }
 
     public char aChar(char[] pool) {
-        return pool[random.nextInt(pool.length)];
+        return stringChance.aChar(pool);
     }
 
     public String aString(int length, char[] pool) {
-        char[] resultChars = new char[length];
-
-        for (int i = 0; i < resultChars.length; i++) {
-            resultChars[i] = aChar(pool);
-        }
-
-        return new String(resultChars);
+        return stringChance.aString(length, pool);
     }
 
     public String aString(int length) {
-        return aString(length, ALPHA_NUMERIC_CHARS);
+        return stringChance.aString(length);
     }
 
     public String aString(char[] pool) {
-        return aString(randomIntBetween(5, 20), pool);
+        return stringChance.aString(pool);
     }
 
     public String aString() {
-        return aString(randomIntBetween(5, 20), ALPHA_NUMERIC_CHARS);
+        return stringChance.aString();
     }
 
+    //// GUID Chance Wrappers
+    public String aGuid() {
+        return guidChance.aGuid();
+    }
+
+    //// Boolean Chance Wrappers
+    public boolean aBool() {
+        return booleanChance.aBool();
+    }
+
+    public boolean aBool(int likelihood) {
+        return booleanChance.aBool(likelihood);
+    }
+
+    // Date Chance Wrappers
     public DateTime aDateTime() {
         return new DateTime(aLong());
     }
@@ -145,9 +143,5 @@ public class Chance {
         return null;
     }
 
-    private int randomIntBetween(int min, int max) {
-        // nextInt is exclusive of the top value,
-        // so add 1 to make it inclusive
-        return random.nextInt((max - min) + 1) + min;
-    }
+
 }
