@@ -3,10 +3,7 @@ package com.stevemosley.chance;
 import static com.google.common.base.Preconditions.*;
 import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 
-import com.stevemosley.chance.base.BooleanChance;
-import com.stevemosley.chance.base.GuidChance;
-import com.stevemosley.chance.base.NumericChance;
-import com.stevemosley.chance.base.StringChance;
+import com.stevemosley.chance.base.*;
 import org.joda.time.DateTime;
 
 import java.util.Random;
@@ -28,6 +25,8 @@ public class Chance {
     private final GuidChance guidChance;
 
     private final BooleanChance booleanChance;
+
+    private final TimeChance timeChance;
 
 
     /**
@@ -64,6 +63,7 @@ public class Chance {
         this.stringChance = new StringChance(settings);
         this.guidChance = new GuidChance(settings);
         this.booleanChance = new BooleanChance(settings);
+        this.timeChance = new TimeChance(settings);
     }
 
     //// Numeric Chance Wrappers
@@ -134,14 +134,33 @@ public class Chance {
         return booleanChance.aBool(likelihood);
     }
 
-    // Date Chance Wrappers
+    // Time Chance Wrappers
+    public String ampm() {
+        return timeChance.ampm();
+    }
+
+    public int hour12() {
+        return timeChance.hour12();
+    }
+
+    public int hour24() {
+        return timeChance.hour24();
+    }
+
+    public int minute() {
+        return timeChance.minute();
+    }
+
+    public int second() {
+        return timeChance.second();
+    }
+
+    public int millisecond() {
+        return timeChance.millisecond();
+    }
+
     public DateTime aDateTime() {
-        return new DateTime(aLong());
+        return timeChance.aDateTime();
     }
-
-    public DateTime aDateTimeInTheFuture() {
-        return null;
-    }
-
 
 }
