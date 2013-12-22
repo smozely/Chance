@@ -5,6 +5,7 @@ import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 
 import com.google.common.primitives.Chars;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 import java.util.Random;
 import java.util.UUID;
