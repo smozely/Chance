@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import org.joda.time.YearMonth;
 
 /**
- * This class contains the methods for generating random date/time related values.
+ * This class contains methods for generating random time related values.
  */
 public class TimeChance extends ChanceSupport {
 

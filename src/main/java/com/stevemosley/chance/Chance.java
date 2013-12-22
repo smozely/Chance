@@ -1,13 +1,11 @@
 package com.stevemosley.chance;
 
-import static com.google.common.base.Preconditions.*;
 import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 
 import com.stevemosley.chance.base.*;
 import org.joda.time.DateTime;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * TODO
@@ -27,6 +25,8 @@ public class Chance {
     private final BooleanChance booleanChance;
 
     private final TimeChance timeChance;
+
+    private final DateChance dateChance;
 
 
     /**
@@ -64,6 +64,7 @@ public class Chance {
         this.guidChance = new GuidChance(settings);
         this.booleanChance = new BooleanChance(settings);
         this.timeChance = new TimeChance(settings);
+        this.dateChance = new DateChance(settings);
     }
 
     //// Numeric Chance Wrappers
@@ -161,6 +162,19 @@ public class Chance {
 
     public DateTime aDateTime() {
         return timeChance.aDateTime();
+    }
+
+    //// Date Chance Wrappers
+    public int monthInt() {
+        return dateChance.monthInt();
+    }
+
+    public String monthShort() {
+        return dateChance.monthShort();
+    }
+
+    public String monthLong() {
+        return dateChance.monthLong();
     }
 
 }
