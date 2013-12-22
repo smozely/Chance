@@ -39,12 +39,4 @@ public class ChanceTest {
         assertEquals(true, constructed.aBool());
     }
 
-    @Test
-    public void testWithRandomConstructor() throws Exception {
-        Chance constructed = new Chance(new Random(1));
-
-        // Since this has been created with a fixed seed result will always be the same
-        assertEquals(true, constructed.aBool());
-    }
-
 }

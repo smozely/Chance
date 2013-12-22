@@ -48,6 +48,22 @@ public class DateChance extends ChanceSupport {
         super(settings);
     }
 
+    public long timestamp(long min, long max) {
+        return randomLongBetween(min, max);
+    }
+
+    public long timestamp() {
+        return timestamp(0, Long.MAX_VALUE);
+    }
+
+    public long timestampFuture() {
+        return timestamp(getTimestamp(), Long.MAX_VALUE);
+    }
+
+    public long timestampPast() {
+        return timestamp(0, getTimestamp());
+    }
+
     private Month randomMonth() {
         return Month.values()[randomIntBetween(0, 11)];
     }
@@ -64,6 +80,14 @@ public class DateChance extends ChanceSupport {
         return randomMonth().getLongName();
     }
 
+    public int year(int min, int max) {
+        return randomIntBetween(min, max);
+    }
+
+    public int year() {
+        int currentYear = getTimestampDateTime().getYear();
+        return year(currentYear, currentYear + 100);
+    }
 
 }
 

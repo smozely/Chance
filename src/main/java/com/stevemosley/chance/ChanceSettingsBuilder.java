@@ -1,5 +1,9 @@
 package com.stevemosley.chance;
 
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.joda.time.DateTime;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -7,36 +11,48 @@ import java.util.Random;
 
 public class ChanceSettingsBuilder {
 
-    private Random randy;
+    private RandomGenerator generator;
+
+    private long timestamp = DateTime.now().getMillis();
 
     public static ChanceSettingsBuilder aChanceSettings() {
-        return aChanceSettings(new SecureRandom());
+        return new ChanceSettingsBuilder().withRandomGenerator(new JDKRandomGenerator());
     }
 
     public static ChanceSettingsBuilder aChanceSettings(long seed) {
-        try {
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            secureRandom.setSeed(seed);
-            return new ChanceSettingsBuilder(secureRandom);
-        } catch (NoSuchProviderException | NoSuchAlgorithmException exception) {
-            throw new RuntimeException("Error getting SecureRandom instance using 'SHA1PRNG'", exception);
-        }
+        return new ChanceSettingsBuilder().withRandomSeed(seed);
     }
 
-    public static ChanceSettingsBuilder aChanceSettings(Random random) {
-        return new ChanceSettingsBuilder(random);
+    public static ChanceSettingsBuilder aChanceSettings(RandomGenerator generator) {
+        return new ChanceSettingsBuilder().withRandomGenerator(generator);
     }
 
-    private ChanceSettingsBuilder(Random random) {
-        this.randy = random;
+    private ChanceSettingsBuilder() {
+        // Only Construct through factory methods.
     }
 
-    public ChanceSettingsBuilder withRandom(Random randy) {
-        this.randy = randy;
+    public ChanceSettingsBuilder withRandomGenerator(RandomGenerator generator) {
+        this.generator = generator;
+        return this;
+    }
+
+    public ChanceSettingsBuilder withRandomSeed(long seed) {
+        this.generator = new JDKRandomGenerator();
+        this.generator.setSeed(seed);
+        return this;
+    }
+
+    public ChanceSettingsBuilder withCurrentTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    public ChanceSettingsBuilder withCurrentTimestamp(DateTime timestamp) {
+        this.timestamp = timestamp.getMillis();
         return this;
     }
 
     public ChanceSettings build() {
-        return new ChanceSettings(randy);
+        return new ChanceSettings(generator, timestamp);
     }
 }

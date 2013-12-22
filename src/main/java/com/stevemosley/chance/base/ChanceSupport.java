@@ -1,6 +1,9 @@
 package com.stevemosley.chance.base;
 
 import com.stevemosley.chance.ChanceSettings;
+import org.apache.commons.math3.random.RandomDataGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.joda.time.DateTime;
 
 import java.util.Random;
 
@@ -15,13 +18,23 @@ public abstract class ChanceSupport {
         this.settings = settings;
     }
 
-    protected int randomIntBetween(int min, int max) {
-        // nextInt is exclusive of the top value,
-        // so add 1 to make it inclusive
-        return random().nextInt((max - min) + 1) + min;
+    protected RandomGenerator random() {
+        return settings.getGenerator();
     }
 
-    protected final Random random() {
-        return settings.getRandom();
+    protected int randomIntBetween(int min, int max) {
+        return settings.getDataGenerator().nextInt(min, max);
+    }
+
+    protected long randomLongBetween(long min, long max) {
+        return settings.getDataGenerator().nextLong(min, max);
+    }
+
+    protected long getTimestamp() {
+        return settings.getTimestamp();
+    }
+
+    protected DateTime getTimestampDateTime() {
+        return settings.getTimestampDateTime();
     }
 }

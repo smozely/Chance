@@ -1,9 +1,7 @@
 package com.stevemosley.chance.base;
 
 import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -11,18 +9,11 @@ import org.junit.Test;
 
 public class BooleanChanceTest {
 
-    private final BooleanChance underTest = new BooleanChance(aChanceSettings(1234567890).build());
+    private final BooleanChance underTest = new BooleanChance(aChanceSettings().build());
 
     @Test
     public void testBoolReturns() throws Exception {
-
-        // GIVEN
-
-        // WHEN
-        boolean result = underTest.aBool();
-
-        // THEN
-        assertEquals(true, result);
+        assertThat(underTest.aBool(), anyOf(equalTo(true), equalTo(false)));
     }
 
     @Test
@@ -33,14 +24,14 @@ public class BooleanChanceTest {
         // WHEN
         int trueCount = 0;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             if (underTest.aBool()) {
                 trueCount++;
             }
         }
 
         // THEN
-        assertThat(trueCount, allOf(greaterThan(475), lessThan(525)));
+        assertThat(trueCount, allOf(greaterThan(4750), lessThan(5250)));
     }
 
     @Test

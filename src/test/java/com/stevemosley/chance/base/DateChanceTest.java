@@ -4,7 +4,9 @@ import static com.stevemosley.chance.ChanceSettingsBuilder.aChanceSettings;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.hamcrest.Matcher;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Repeat;
@@ -59,6 +61,19 @@ public class DateChanceTest {
     @Repeat(100)
     public void testMonthLong() {
         assertThat(underTest.monthLong(), is(ANY_MONTH_LONG_NAME));
+    }
+
+    @Test
+    @Repeat(100)
+    public void testYearMinMax() {
+        assertThat(underTest.year(1900, 1950), allOf(greaterThanOrEqualTo(1900), lessThanOrEqualTo(1950)));
+    }
+
+    @Test
+    @Repeat(100)
+    public void testYear() {
+        int currentYear = DateTime.now().getYear();
+        assertThat(underTest.year(), allOf(greaterThanOrEqualTo(currentYear), lessThanOrEqualTo(currentYear + 100)));
     }
 
 }

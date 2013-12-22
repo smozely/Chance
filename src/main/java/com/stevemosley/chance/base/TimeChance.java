@@ -1,8 +1,6 @@
 package com.stevemosley.chance.base;
 
 import com.stevemosley.chance.ChanceSettings;
-import org.joda.time.DateTime;
-import org.joda.time.YearMonth;
 
 /**
  * This class contains methods for generating random time related values.
@@ -35,10 +33,6 @@ public class TimeChance extends ChanceSupport {
 
     public int millisecond() {
         return randomIntBetween(0, 999);
-    }
-
-    public DateTime aDateTime() {
-        return new DateTime(random().nextLong());
     }
 
 }

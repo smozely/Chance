@@ -14,8 +14,6 @@ public class Chance {
 
     private ChanceSettings settings;
 
-    private final Random random;
-
     private final NumericChance numericChance;
 
     private final StringChance stringChance;
@@ -46,18 +44,8 @@ public class Chance {
         this(aChanceSettings(seed).build());
     }
 
-    /**
-     * Construct with a Random instance, useful for
-     *
-     * @param random - the random to use
-     */
-    public Chance(Random random) {
-        this(aChanceSettings(random).build());
-    }
-
     public Chance(ChanceSettings settings) {
         this.settings = settings;
-        this.random = settings.getRandom();
 
         this.numericChance = new NumericChance(settings);
         this.stringChance = new StringChance(settings);
@@ -158,10 +146,6 @@ public class Chance {
 
     public int millisecond() {
         return timeChance.millisecond();
-    }
-
-    public DateTime aDateTime() {
-        return timeChance.aDateTime();
     }
 
     //// Date Chance Wrappers
